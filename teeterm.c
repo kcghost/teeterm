@@ -13,9 +13,10 @@
 #include <errno.h>
 
 uint8_t buf[BUFSIZ];
+/* Ensure ts starts initialized to zero */
 struct termios ts;
 
-void sig_handler(int signo)
+void cleanup(int signo)
 {
 	if(unlink("pty0") < 0) {
 		perror("Could not unlink pty0");
@@ -51,6 +52,9 @@ int main(int argc, char* argv[])
 
 	cfmakeraw(&ts);
 
+	signal(SIGCHLD, cleanup);
+	signal(SIGINT, cleanup);
+
 	if((pid = forkpty(&child_pty, NULL, &ts, NULL)) < 0) {
 		perror("Could not fork");
 		return 1;
@@ -73,8 +77,6 @@ int main(int argc, char* argv[])
 				return 1;
 			}
 		}
-
-		signal(SIGINT, sig_handler);
 
 		while(1) {
 			FD_ZERO(&readfds);
