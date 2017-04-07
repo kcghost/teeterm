@@ -11,6 +11,7 @@
 #include <pty.h>
 #include <signal.h>
 #include <errno.h>
+#include <sys/fcntl.h>
 
 uint8_t buf[BUFSIZ];
 /* Ensure ts starts initialized to zero */
@@ -71,6 +72,7 @@ int main(int argc, char* argv[])
 			if(master[i] > nfds) {
 				nfds = master[i];
 			}
+			fcntl(master[i], F_SETFL, O_NONBLOCK);
 			puts(ttyname(slave[i]));
 			if(symlink(ttyname(slave[i]), (i == 0) ? "pty0" : "pty1") < 0) {
 				perror("Could not set pty link");
