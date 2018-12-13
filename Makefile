@@ -69,4 +69,4 @@ clean:
 	-rm -f teeterm
 
 teeterm: teeterm.c
-	gcc -Wall -Werror -lutil $? -o $@
+	gcc -Wall -Werror $? -o $@ -lutil
