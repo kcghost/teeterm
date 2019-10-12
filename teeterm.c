@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 	
-	for (int i = 0; i <= 1; ++i) {
+	for (i = 0; i <= 1; ++i) {
 		strcpy(ptyNames[i], "pty");
 		if (customname) {
 			strcat(ptyNames[i], argv[2]);
